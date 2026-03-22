@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Fortress Dashboard</title>
+</head>
+<body>
+
+<h1>Campus Fortress Dashboard</h1>
+
+<div id="output">⏳ Waiting...</div>
+
+<script>
+async function fetchData() {
+    try {
+        const res = await fetch("http://127.0.0.1:8000/api/v2/latest");
+        const data = await res.json();
+
+        console.log("DATA:", data);
+
+        let box = document.getElementById("output");
+
+        if (!data.action) {
+            box.innerHTML = "⏳ Waiting for authentication...";
+            return;
+        }
+
+        if (data.action === "ALLOW") {
+            box.innerHTML = "LOGIN ALLOWED";
+        } 
+        else if (data.action === "FALLBACK") {
+            box.innerHTML = "VERIFY IDENTITY";
+        } 
+        else {
+            box.innerHTML = "ACCESS DENIED";
+        }
+
+    } catch (err) {
+        console.error("ERROR:", err);
+    }
+}
+
+setInterval(fetchData, 2000);
+</script>
+
+</body>
+</html>
